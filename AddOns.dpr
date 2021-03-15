@@ -7,7 +7,6 @@ uses
   UntBibliotecaFuncoes in 'D:\Biblioteca\UntBibliotecaFuncoes.pas',
   UntBuscaComponentes in 'D:\Biblioteca\UntBuscaComponentes.pas',
   UntBuscaComponentesTela in 'D:\Biblioteca\UntBuscaComponentesTela.pas' {FrmBuscaComponentesTela},
-  UntComponentesGerais in 'D:\Biblioteca\UntComponentesGerais.pas' {FrmComponentes},
   UntConstantes in 'D:\Biblioteca\UntConstantes.pas',
   UntImpressaoTermica in 'D:\Biblioteca\UntImpressaoTermica.pas',
   UntMensagem in 'D:\Biblioteca\UntMensagem.pas' {FrmMensagem},
@@ -26,7 +25,6 @@ begin
   Application.CreateForm(TFrmMensagem, FrmMensagem);
   Application.CreateForm(TFrmBuscaComponentesTela, FrmBuscaComponentesTela);
   Application.CreateForm(TFrmBuscaComponentesTela, FrmBuscaComponentesTela);
-  Application.CreateForm(TFrmComponentes, FrmComponentes);
   Application.CreateForm(TFrmMensagem, FrmMensagem);
   Application.Run;
 end.

@@ -113,10 +113,6 @@
             <Form>FrmBuscaComponentesTela</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="D:\Biblioteca\UntComponentesGerais.pas">
-            <Form>FrmComponentes</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="D:\Biblioteca\UntConstantes.pas"/>
         <DCCReference Include="D:\Biblioteca\UntImpressaoTermica.pas"/>
         <DCCReference Include="D:\Biblioteca\UntMensagem.pas">

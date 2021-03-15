@@ -65,12 +65,27 @@ begin
       WriteIniFile('PASTADOWNLOAD', SelectDir('Selecione a pasta dos downloads'));
       WriteIniFile('PASTAEXTRAIR', SelectDir('Selecione a pasta onde os arquivos serão extraidos'));
       WriteIniFile('BROWSER','msedge.exe');
+      WriteIniFile('APP', 'NAO');
       OpenDialog.Title := 'Selecine o executavel que será aberto';
       if(OpenDialog.Execute())then
       begin
          vCaminhoExecutavel := OpenDialog.FileName;
          WriteIniFile('EXECUTAVEL', vCaminhoExecutavel);
       end;
+   end;
+
+   //FECHA O EXE CASO JA TIVER UM ABERTO
+   if(ReadIniFileStr('APP') = 'SIM')then
+   begin
+      AddStatus('Executável já esta aberto');
+      Sleep(3000);
+      FrmMain.Close;
+      Exit;
+   end
+   else
+   begin
+      //REGISTRA QUE ABRIU UM
+      WriteIniFile('APP', 'SIM');
    end;
 
    lbNome.Caption     := ReadIniFileStr('NOME');
@@ -94,6 +109,7 @@ begin
    if(ReadIniFileStr('NOME') = 'Configurar')then
    begin
       AddStatus('Configuração necessária');
+      WriteIniFile('APP', 'NAO');
       Sleep(3000);
       FrmMain.Close;
       Exit;
@@ -180,6 +196,7 @@ begin
       Application.ProcessMessages;
    end;
 
+   WriteIniFile('APP', 'NAO');
    Application.ProcessMessages;
    FrmMain.Close;
 end;
