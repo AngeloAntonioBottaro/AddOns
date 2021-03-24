@@ -2,18 +2,20 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2021/03/01 08:32:59.000.112,=C:\Projetos\Unit1.pas</Transaction>
-    <Transaction>2021/03/01 08:33:20.000.261,C:\Projetos\Unit1.pas=C:\Projetos\Temp\UntMain.pas</Transaction>
     <Transaction>2021/03/01 08:33:20.000.261,C:\Projetos\Unit1.dfm=C:\Projetos\Temp\UntMain.dfm</Transaction>
+    <Transaction>2021/03/01 08:33:20.000.261,C:\Projetos\Unit1.pas=C:\Projetos\Temp\UntMain.pas</Transaction>
     <Transaction>2021/03/01 08:33:27.000.245,C:\Projetos\Project1.dproj=C:\Projetos\Temp\AddOns.dproj</Transaction>
     <Transaction>2021/03/01 11:04:50.000.527,=D:\Biblioteca\UntMensagem.pas</Transaction>
     <Transaction>2021/03/01 11:04:50.000.371,=D:\Biblioteca\UntBibliotecaFuncoes.pas</Transaction>
     <Transaction>2021/03/01 11:05:44.000.649,=D:\Biblioteca\UntBuscaComponentesTela.pas</Transaction>
     <Transaction>2021/03/01 11:06:00.000.120,=D:\Biblioteca\UntBuscaComponentes.pas</Transaction>
-    <Transaction>2021/03/01 11:06:32.000.483,=D:\Biblioteca\UntComponentesGerais.pas</Transaction>
     <Transaction>2021/03/01 11:06:32.000.565,=D:\Biblioteca\UntTypes.pas</Transaction>
+    <Transaction>2021/03/01 11:06:32.000.483,=D:\Biblioteca\UntComponentesGerais.pas</Transaction>
     <Transaction>2021/03/01 11:06:32.000.313,=D:\Biblioteca\uCComunicacao.pas</Transaction>
     <Transaction>2021/03/01 11:06:32.000.575,=D:\Biblioteca\UntVariaveis.pas</Transaction>
     <Transaction>2021/03/01 11:06:32.000.492,=D:\Biblioteca\UntConstantes.pas</Transaction>
     <Transaction>2021/03/01 11:06:32.000.540,=D:\Biblioteca\UntImpressaoTermica.pas</Transaction>
+    <Transaction>2021/03/24 16:17:12.000.984,D:\Biblioteca\UntImpressaoTermica.pas=</Transaction>
+    <Transaction>2021/03/24 16:17:12.000.999,D:\Biblioteca\uCComunicacao.pas=</Transaction>
   </Transactions>
 </BorlandProject>

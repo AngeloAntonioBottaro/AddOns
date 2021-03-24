@@ -2,7 +2,7 @@ object FrmMain: TFrmMain
   Left = 0
   Top = 0
   Caption = 'AddOns'
-  ClientHeight = 61
+  ClientHeight = 83
   ClientWidth = 370
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,11 +16,12 @@ object FrmMain: TFrmMain
   PixelsPerInch = 96
   TextHeight = 13
   object lbNome: TLabel
-    Left = 0
-    Top = 0
-    Width = 370
-    Height = 33
-    Align = alTop
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 364
+    Height = 58
+    Align = alClient
     Alignment = taCenter
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -29,6 +30,7 @@ object FrmMain: TFrmMain
     Font.Style = [fsBold]
     ParentFont = False
     ExplicitWidth = 8
+    ExplicitHeight = 33
   end
   object Memo1: TMemo
     Left = 44
@@ -41,7 +43,7 @@ object FrmMain: TFrmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 42
+    Top = 64
     Width = 370
     Height = 19
     Panels = <
