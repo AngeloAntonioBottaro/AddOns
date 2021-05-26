@@ -2,8 +2,8 @@ object FrmMain: TFrmMain
   Left = 0
   Top = 0
   Caption = 'AddOns'
-  ClientHeight = 83
-  ClientWidth = 370
+  ClientHeight = 124
+  ClientWidth = 377
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,8 +19,8 @@ object FrmMain: TFrmMain
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 364
-    Height = 58
+    Width = 371
+    Height = 99
     Align = alClient
     Alignment = taCenter
     Font.Charset = DEFAULT_CHARSET
@@ -43,8 +43,8 @@ object FrmMain: TFrmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 64
-    Width = 370
+    Top = 105
+    Width = 377
     Height = 19
     Panels = <
       item
