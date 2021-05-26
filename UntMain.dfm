@@ -1,9 +1,11 @@
 object FrmMain: TFrmMain
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
   Caption = 'AddOns'
-  ClientHeight = 124
-  ClientWidth = 377
+  ClientHeight = 134
+  ClientWidth = 387
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,8 +21,8 @@ object FrmMain: TFrmMain
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 371
-    Height = 99
+    Width = 381
+    Height = 109
     Align = alClient
     Alignment = taCenter
     Font.Charset = DEFAULT_CHARSET
@@ -29,8 +31,17 @@ object FrmMain: TFrmMain
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
+    Layout = tlCenter
     ExplicitWidth = 8
     ExplicitHeight = 33
+  end
+  object BtnFechar: TImage
+    Left = 354
+    Top = 8
+    Width = 25
+    Height = 25
+    Cursor = crNo
+    OnClick = BtnFecharClick
   end
   object Memo1: TMemo
     Left = 44
@@ -43,8 +54,8 @@ object FrmMain: TFrmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 105
-    Width = 377
+    Top = 115
+    Width = 387
     Height = 19
     Panels = <
       item

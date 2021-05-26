@@ -14,10 +14,14 @@ type
     StatusBar1: TStatusBar;
     lbNome: TLabel;
     OpenDialog: TOpenDialog;
+    BtnFechar: TImage;
     procedure FormShow(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+    procedure BtnFecharClick(Sender: TObject);
   private
     VTotItens: Integer;
+    VPastaDownload, VPastaExtrair, VCaminhoExecutavel, VBrowser: String;
+    VInternet, VFechar: Boolean;
 
     procedure AddStatus(pStr: string);
     procedure ExisteArqConf;
@@ -25,6 +29,7 @@ type
     procedure CriarArqConf;
     procedure LimparPastaDownload;
     procedure BaixarArquivos;
+    procedure VerificarArqBaixados;
     procedure ListaArqBaixados;
     procedure CloseBrowser;
     procedure OpenGameExe;
@@ -47,22 +52,22 @@ uses UntBibliotecaFuncoes;
 
 procedure TFrmMain.AddStatus(pStr: string);
 begin
-   StatusBar1.Panels[0].Text := pStr;
+   if(VFechar = False)then StatusBar1.Panels[0].Text := pStr;
    Application.ProcessMessages;
 end;
 
 function TFrmMain.AppJaRodando: Boolean;
 begin
-   if(ReadIniFileStr('APP') = 'SIM')then
+   if(UpperCase(ReadIniFileStr('APP')) = UpperCase('SIM'))then
    begin
-      AddStatus('Executável já esta aberto');
+      AddStatus('Executável já está aberto');
       Sleep(3000);
       Result := True;
    end
    else
    begin
-      //REGISTRA QUE ABRIU UM
-      WriteIniFile('APP', 'SIM');
+      //REGISTRA QUE ABRIU
+      WriteIniFile('APP', UpperCase('SIM'));
       Result := False;
    end;
    Application.ProcessMessages;
@@ -79,16 +84,18 @@ begin
 
    AssignFile(vArq, GetAppPath() + GetAppName() + '.txt');
    Reset(vArq);
-
-   while Eof(vArq) = False do
+   while(Eof(vArq) = False)and(VFechar = False)do
    begin
       Readln(vArq, vLink);
       if(Trim(vLink) <> '')and(Trim(vLink) <> '404')then
       begin
          OpenLink(vLink, tpAbrirLinkInvisivel);
          Application.ProcessMessages;
-         Sleep(15000);
          IncInt(vTotItens);
+
+         //CONTINUA APENAS QUANDO TIVER BAIXADO
+         Self.ListaArqBaixados;
+
          Application.ProcessMessages;
       end;
    end;
@@ -97,15 +104,17 @@ begin
    Application.ProcessMessages;
 end;
 
-procedure TFrmMain.CloseBrowser;
-var
-  vBrowser: string;
+procedure TFrmMain.BtnFecharClick(Sender: TObject);
 begin
-   vBrowser := ReadIniFileStr('BROWSER');
+   AddStatus('Processo cancelado!');
+   VFechar := True;
+end;
 
-   if(vBrowser <> '')then
+procedure TFrmMain.CloseBrowser;
+begin
+   if(VBrowser <> '')then
    begin
-      CloseEXE(vBrowser);
+      CloseEXE(VBrowser);
       Sleep(5000);
    end;
    Application.ProcessMessages;
@@ -113,22 +122,26 @@ end;
 
 function TFrmMain.ConfigRealizadas: Boolean;
 begin
-   Result := True;
-   if(ReadIniFileStr('NOME') = 'Configurar')then
+   if(Trim(ReadIniFileStr('NOME')) = 'Configurar')then
    begin
       AddStatus('Configuração necessária');
       WriteIniFile('APP', 'NAO');
       Result := False;
       Sleep(3000);
+   end
+   else
+   begin
+      lbNome.Caption     := Trim(ReadIniFileStr('NOME'));
+      VPastaDownload     := Trim(ReadIniFileStr('PASTADOWNLOAD'));
+      VPastaExtrair      := Trim(ReadIniFileStr('PASTAEXTRAIR'));
+      VCaminhoExecutavel := Trim(ReadIniFileStr('EXECUTAVEL'));
+      VBrowser           := Trim(ReadIniFileStr('BROWSER'));
+      Result := True;
    end;
-
-   lbNome.Caption := ReadIniFileStr('NOME');
    Application.ProcessMessages;
 end;
 
 procedure TFrmMain.CriarArqConf;
-var
-  vCaminhoExecutavel: TFileName;
 begin
    WriteIniFile('NOME', 'Configurar');
    WriteIniFile('PASTADOWNLOAD', SelectDir('Selecione a pasta dos downloads'));
@@ -139,14 +152,16 @@ begin
    OpenDialog.Title := 'Selecine o executavel que será aberto';
    if(OpenDialog.Execute())then
    begin
-      vCaminhoExecutavel := OpenDialog.FileName;
-      WriteIniFile('EXECUTAVEL', vCaminhoExecutavel);
+      VCaminhoExecutavel := OpenDialog.FileName;
+      WriteIniFile('EXECUTAVEL', VCaminhoExecutavel);
    end;
    Application.ProcessMessages;
 end;
 
 procedure TFrmMain.FormShow(Sender: TObject);
 begin
+   VInternet      := True;
+   VFechar        := False;
    Timer1.Enabled := True;
 end;
 
@@ -154,49 +169,34 @@ procedure TFrmMain.LimparPastaDownload;
 var
   vnomeArq: string;
   I: Integer;
-  vPastaDownload: string;
 begin
    AddStatus('Limpando pasta de downloads');
-   vPastaDownload := ReadIniFileStr('PASTADOWNLOAD');
 
-   ListFiles(Memo1, vPastaDownload);
+   ListFiles(Memo1, VPastaDownload);
    for I := 0 to Memo1.Lines.Count do
    begin
       vnomeArq := ExtractFileName(Memo1.Lines[i]);
 
       //DELETA OS ARQUIVOS
-      DeleteFile(vPastaDownload + vnomeArq);
+      DeleteFile(VPastaDownload + vnomeArq);
       Application.ProcessMessages;
    end;
 end;
 
 procedure TFrmMain.ListaArqBaixados;
-var
-  vPastaDownload: string;
 begin
-   AddStatus('Verificando arquivos baixados');
-   Application.ProcessMessages;
-
-   Memo1.Lines.Clear;
-   vPastaDownload := ReadIniFileStr('PASTADOWNLOAD');
-
    repeat
-     ListFiles(Memo1, vPastaDownload, 'zip');
-     Sleep(2000);
-   until (vTotItens = Memo1.Lines.Count);
-
-   AddStatus('Arquivos baixados com sucesso');
+     ListFiles(Memo1, VPastaDownload, 'zip');
+     Sleep(1000);
+   until (VTotItens = Memo1.Lines.Count)or(VFechar = True);
+   Application.ProcessMessages;
 end;
 
 procedure TFrmMain.OpenGameExe;
-var
-  vCaminhoExecutavel: string;
 begin
-   vCaminhoExecutavel := Trim(ReadIniFileStr('EXECUTAVEL'));
-
-   if(vCaminhoExecutavel <> '')then
+   if(VCaminhoExecutavel <> '')and(VFechar = False)then
    begin
-      OpenLink(vCaminhoExecutavel);
+      OpenLink(VCaminhoExecutavel);
       Application.ProcessMessages;
       Sleep(2000);
    end;
@@ -208,17 +208,17 @@ begin
      Timer1.Enabled := False;
 
      //VERIFICA SE EXISTE O ARQUIVO DE CONFIGURACAO
-     Self.ExisteArqConf;
+     if(VFechar = False)then Self.ExisteArqConf;
+
+     //VERIFICA SE EXISTE O ARQUIVO COM OS LINKS
+     if(VFechar = False)then Self.ExisteArqLinks;
 
      //FECHA O EXE CASO JA TIVER UM ABERTO
-     if(Self.AppJaRodando)then
+     if(VInternet)and(Self.AppJaRodando)then
      begin
         FrmMain.Close;
         Exit;
      end;
-
-     //VERIFICA SE EXISTE O ARQUIVO COM OS LINKS
-     Self.ExisteArqLinks;
 
      //VERIFICA SE FOI REALIZADO AS CONFIGURACOES
      if not(Self.ConfigRealizadas)then
@@ -232,33 +232,57 @@ begin
 
      //VERIFICA SE ESTA CONECTADO COM A INTERNET PARA PODER BAIXAR OS ARQUIVOS
      AddStatus('Verificando conexão da internet');
-     if(InternetConnection = False)then
+     VInternet := InternetConnection();
+     if(VInternet = False)then
      begin
-        Timer1.Interval := 30000;
+        Timer1.Interval := 5000;
         AddStatus('Sem conexão com a internet');
         Timer1.Enabled := True;
         Exit;
      end;
 
      //PERCORRE OS LINKS BAIXANDO TODOS
-     Self.BaixarArquivos;
+     if(VFechar = False)then Self.BaixarArquivos;
 
      //LISTA OS ARQUIVOS BAIXADOS
-     Self.ListaArqBaixados;
+     if(VFechar = False)then Self.VerificarArqBaixados;
 
      //FECHA O BROWSER
      Self.CloseBrowser;
 
      //EXTRAI OS ARQUIVOS PARA A PASTA SELECIONADA
-     Self.ExtrairArquivos;
+     if(VFechar = False)then Self.ExtrairArquivos;
+
+     //LIMPA A PASTA DOWNLOAD
+     Self.LimparPastaDownload;
+
+     AddStatus('Processo concluído!');
+     Application.ProcessMessages;
+     Sleep(5000);
 
      //ABRE O EXE DESEJADO
-     Self.OpenGameExe;
+     if(VFechar = False)then Self.OpenGameExe;
    finally
-     WriteIniFile('APP', 'NAO');
-     Application.ProcessMessages;
-     FrmMain.Close;
+   begin
+      if(VInternet)or(VFechar)then
+      begin
+         WriteIniFile('APP', 'NAO');
+         Application.ProcessMessages;
+         FrmMain.Close;
+      end;
    end;
+   end;
+end;
+
+procedure TFrmMain.VerificarArqBaixados;
+begin
+   AddStatus('Verificando arquivos baixados');
+   Application.ProcessMessages;
+
+   Self.ListaArqBaixados;
+
+   AddStatus('Arquivos baixados com sucesso');
+   Application.ProcessMessages;
 end;
 
 procedure TFrmMain.ExisteArqConf;
@@ -293,30 +317,27 @@ end;
 procedure TFrmMain.ExtrairArquivos;
 var
   I: Integer;
-  vPastaExtrair: string;
-  vPastaDownload: string;
   vnomeArq: string;
 begin
-   vPastaDownload := ReadIniFileStr('PASTADOWNLOAD');
-   vPastaExtrair  := ReadIniFileStr('PASTAEXTRAIR');
-
-   AddStatus('Extraindo arquivos para: ' + vPastaExtrair);
+   AddStatus('Extraindo arquivos para: ' + VPastaExtrair);
    Application.ProcessMessages;
 
    for I := 0 to Memo1.Lines.Count do
    begin
+      if(VFechar)then Break;
+
       vnomeArq := ExtractFileName(Memo1.Lines[i]);
 
       //DESCOMPACTA NA PASTA CERTA E EXCLUI O ARQUIVO DOS DOWNLOADS
-      if(DescompactFile(vPastaDownload + vnomeArq, vPastaExtrair))then
+      if(DescompactFile(VPastaDownload + vnomeArq, VPastaExtrair))then
       begin
-         DeleteFile(vPastaDownload + vnomeArq);
+         DeleteFile(VPastaDownload + vnomeArq);
       end;
       Application.ProcessMessages;
    end;
 
-   AddStatus('Concluido');
-   Sleep(5000);
+   AddStatus('Arquivos descompactados');
+   Sleep(2000);
    Application.ProcessMessages;
 end;
 
