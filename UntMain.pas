@@ -7,6 +7,10 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls,
   System.ImageList, Vcl.ImgList;
 
+const
+   CVersao:    string = '01';
+   CSubVersao: string = '00';
+
 type
   TFrmMain = class(TForm)
     Memo1: TMemo;
@@ -18,6 +22,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure BtnFecharClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     VTotItens: Integer;
     VPastaDownload, VPastaExtrair, VCaminhoExecutavel, VBrowser: String;
@@ -156,6 +161,11 @@ begin
       WriteIniFile('EXECUTAVEL', VCaminhoExecutavel);
    end;
    Application.ProcessMessages;
+end;
+
+procedure TFrmMain.FormCreate(Sender: TObject);
+begin
+   Self.Caption := Self.Caption + '  - Versão: ' + CVersao + '.' + CSubVersao;
 end;
 
 procedure TFrmMain.FormShow(Sender: TObject);
