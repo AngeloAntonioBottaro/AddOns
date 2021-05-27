@@ -83,7 +83,6 @@ var
 begin
    AddStatus('Baixando arquivos');
    VTotItens := 0;
-   I := 0;
    Application.ProcessMessages;
 
    ReadTxtFile(mmLinks.Lines);
@@ -188,7 +187,7 @@ var
 begin
    AddStatus('Limpando pasta de downloads');
 
-   ListFiles(Memo1, VPastaDownload);
+   ListFiles(Memo1.Lines, VPastaDownload);
    for I := 0 to Memo1.Lines.Count do
    begin
       vnomeArq := ExtractFileName(Memo1.Lines[i]);
@@ -202,7 +201,7 @@ end;
 procedure TFrmMain.ListaArqBaixados;
 begin
    repeat
-     ListFiles(Memo1, VPastaDownload, 'zip');
+     ListFiles(Memo1.Lines, VPastaDownload, 'zip');
      Sleep(1000);
    until (VTotItens = Memo1.Lines.Count)or(VFechar = True);
    Application.ProcessMessages;
@@ -328,10 +327,9 @@ begin
       vnomeArq := ExtractFileName(Memo1.Lines[i]);
 
       //DESCOMPACTA NA PASTA CERTA E EXCLUI O ARQUIVO DOS DOWNLOADS
-      if(DescompactFile(VPastaDownload + vnomeArq, VPastaExtrair))then
-      begin
-         DeleteFile(VPastaDownload + vnomeArq);
-      end;
+      DescompactFile(VPastaDownload + vnomeArq, VPastaExtrair);
+      DeleteFile(VPastaDownload + vnomeArq);
+
       Application.ProcessMessages;
    end;
 

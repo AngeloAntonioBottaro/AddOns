@@ -53,7 +53,6 @@ object FrmMain: TFrmMain
     TabOrder = 0
     Visible = False
     WordWrap = False
-    ExplicitTop = 104
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -74,7 +73,6 @@ object FrmMain: TFrmMain
     TabOrder = 2
     Visible = False
     WordWrap = False
-    ExplicitTop = 112
   end
   object Timer1: TTimer
     Enabled = False
