@@ -19,6 +19,7 @@ type
     lbNome: TLabel;
     OpenDialog: TOpenDialog;
     BtnFechar: TImage;
+    mmLinks: TMemo;
     procedure FormShow(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure BtnFecharClick(Sender: TObject);
@@ -28,6 +29,7 @@ type
     VPastaDownload, VPastaExtrair, VCaminhoExecutavel, VBrowser: String;
     VInternet, VFechar: Boolean;
 
+    procedure BehaviorException( Sender : TObject; E: Exception);
     procedure AddStatus(pStr: string);
     procedure ExisteArqConf;
     procedure ExisteArqLinks;
@@ -39,8 +41,8 @@ type
     procedure CloseBrowser;
     procedure OpenGameExe;
     procedure ExtrairArquivos;
-    function AppJaRodando: Boolean;
-    function ConfigRealizadas: Boolean;
+    procedure AppJaRodando;
+    procedure ConfigRealizadas;
     { Private declarations }
   public
     { Public declarations }
@@ -61,40 +63,41 @@ begin
    Application.ProcessMessages;
 end;
 
-function TFrmMain.AppJaRodando: Boolean;
+procedure TFrmMain.AppJaRodando;
 begin
    if(UpperCase(ReadIniFileStr('APP')) = UpperCase('SIM'))then
    begin
-      AddStatus('Executável já está aberto');
-      Sleep(3000);
-      Result := True;
+      raise Exception.Create('Executável já está aberto');
    end
    else
    begin
       //REGISTRA QUE ABRIU
       WriteIniFile('APP', UpperCase('SIM'));
-      Result := False;
    end;
    Application.ProcessMessages;
 end;
 
 procedure TFrmMain.BaixarArquivos;
 var
-  vArq: TextFile;
-  vLink: string;
+  I: Integer;
 begin
    AddStatus('Baixando arquivos');
    VTotItens := 0;
+   I := 0;
    Application.ProcessMessages;
 
-   AssignFile(vArq, GetAppPath() + GetAppName() + '.txt');
-   Reset(vArq);
-   while(Eof(vArq) = False)and(VFechar = False)do
+   ReadTxtFile(mmLinks.Lines);
+
+   if(Trim(mmLinks.Lines.Text) = '404')then
+      raise Exception.Create('Arquivo sem os links configurados');
+
+   for I := 0 to mmLinks.Lines.Count - 1 do
    begin
-      Readln(vArq, vLink);
-      if(Trim(vLink) <> '')and(Trim(vLink) <> '404')then
+      if(VFechar)then Exit;
+
+      if not(mmLinks.Lines[I].IsEmpty)then
       begin
-         OpenLink(vLink, tpAbrirLinkInvisivel);
+         OpenLink(mmLinks.Lines[I], tpAbrirLinkInvisivel);
          Application.ProcessMessages;
          IncInt(vTotItens);
 
@@ -104,9 +107,15 @@ begin
          Application.ProcessMessages;
       end;
    end;
-   CloseFile(vArq);
    Sleep(5000);
    Application.ProcessMessages;
+end;
+
+procedure TFrmMain.BehaviorException(Sender: TObject; E: Exception);
+begin
+   AddStatus(E.Message);
+   Sleep(3000);
+   BtnFecharClick(Sender);
 end;
 
 procedure TFrmMain.BtnFecharClick(Sender: TObject);
@@ -117,21 +126,17 @@ end;
 
 procedure TFrmMain.CloseBrowser;
 begin
-   if(VBrowser <> '')then
-   begin
-      CloseEXE(VBrowser);
-      Sleep(5000);
-   end;
+   CloseEXE(VBrowser);
+   Sleep(5000);
    Application.ProcessMessages;
 end;
 
-function TFrmMain.ConfigRealizadas: Boolean;
+procedure TFrmMain.ConfigRealizadas;
 begin
    if(Trim(ReadIniFileStr('NOME')) = 'Configurar')then
    begin
-      AddStatus('Configuração necessária');
       WriteIniFile('APP', 'NAO');
-      Result := False;
+      raise Exception.Create('Configuração necessária');
       Sleep(3000);
    end
    else
@@ -141,7 +146,6 @@ begin
       VPastaExtrair      := Trim(ReadIniFileStr('PASTAEXTRAIR'));
       VCaminhoExecutavel := Trim(ReadIniFileStr('EXECUTAVEL'));
       VBrowser           := Trim(ReadIniFileStr('BROWSER'));
-      Result := True;
    end;
    Application.ProcessMessages;
 end;
@@ -165,6 +169,8 @@ end;
 
 procedure TFrmMain.FormCreate(Sender: TObject);
 begin
+   ReportMemoryLeaksOnShutdown := True;
+   Application.OnException := BehaviorException;
    Self.Caption := Self.Caption + '  - Versão: ' + CVersao + '.' + CSubVersao;
 end;
 
@@ -224,18 +230,10 @@ begin
      if(VFechar = False)then Self.ExisteArqLinks;
 
      //FECHA O EXE CASO JA TIVER UM ABERTO
-     if(VInternet)and(Self.AppJaRodando)then
-     begin
-        FrmMain.Close;
-        Exit;
-     end;
+     if(VInternet)and(VFechar = False)then Self.AppJaRodando;
 
      //VERIFICA SE FOI REALIZADO AS CONFIGURACOES
-     if not(Self.ConfigRealizadas)then
-     begin
-        FrmMain.Close;
-        Exit;
-     end;
+     if(VFechar = False)then Self.ConfigRealizadas;
 
      //LIMPA A PASTA DOWNLOAD
      Self.LimparPastaDownload;
@@ -263,12 +261,9 @@ begin
      //EXTRAI OS ARQUIVOS PARA A PASTA SELECIONADA
      if(VFechar = False)then Self.ExtrairArquivos;
 
-     //LIMPA A PASTA DOWNLOAD
-     Self.LimparPastaDownload;
-
      AddStatus('Processo concluído!');
      Application.ProcessMessages;
-     Sleep(5000);
+     Sleep(2000);
 
      //ABRE O EXE DESEJADO
      if(VFechar = False)then Self.OpenGameExe;
@@ -277,6 +272,7 @@ begin
       if(VInternet)or(VFechar)then
       begin
          WriteIniFile('APP', 'NAO');
+         Self.LimparPastaDownload;
          Application.ProcessMessages;
          FrmMain.Close;
       end;
@@ -306,20 +302,13 @@ begin
 end;
 
 procedure TFrmMain.ExisteArqLinks;
-var
-  vArq: TextFile;
 begin
    AddStatus('Verificando arquivo com os links');
-   AssignFile(vArq, GetAppPath() + GetAppName() + '.txt');
 
    if not(FileExists(GetAppPath() + GetAppName() + '.txt'))then
    begin
-      Rewrite(vArq);
-      Writeln(vArq,'404');
-      CloseFile(vArq);
+      WriteTxtFile('404');
    end;
-   Reset(vArq);
-   CloseFile(vArq);
 
    Application.ProcessMessages;
 end;
