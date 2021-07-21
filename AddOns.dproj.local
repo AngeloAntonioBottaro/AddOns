@@ -2,20 +2,34 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2021/03/01 08:32:59.000.112,=C:\Projetos\Unit1.pas</Transaction>
-    <Transaction>2021/03/01 08:33:20.000.261,C:\Projetos\Unit1.dfm=C:\Projetos\Temp\UntMain.dfm</Transaction>
     <Transaction>2021/03/01 08:33:20.000.261,C:\Projetos\Unit1.pas=C:\Projetos\Temp\UntMain.pas</Transaction>
+    <Transaction>2021/03/01 08:33:20.000.261,C:\Projetos\Unit1.dfm=C:\Projetos\Temp\UntMain.dfm</Transaction>
     <Transaction>2021/03/01 08:33:27.000.245,C:\Projetos\Project1.dproj=C:\Projetos\Temp\AddOns.dproj</Transaction>
     <Transaction>2021/03/01 11:04:50.000.527,=D:\Biblioteca\UntMensagem.pas</Transaction>
     <Transaction>2021/03/01 11:04:50.000.371,=D:\Biblioteca\UntBibliotecaFuncoes.pas</Transaction>
     <Transaction>2021/03/01 11:05:44.000.649,=D:\Biblioteca\UntBuscaComponentesTela.pas</Transaction>
     <Transaction>2021/03/01 11:06:00.000.120,=D:\Biblioteca\UntBuscaComponentes.pas</Transaction>
-    <Transaction>2021/03/01 11:06:32.000.565,=D:\Biblioteca\UntTypes.pas</Transaction>
-    <Transaction>2021/03/01 11:06:32.000.483,=D:\Biblioteca\UntComponentesGerais.pas</Transaction>
-    <Transaction>2021/03/01 11:06:32.000.313,=D:\Biblioteca\uCComunicacao.pas</Transaction>
+    <Transaction>2021/03/01 11:06:32.000.540,=D:\Biblioteca\UntImpressaoTermica.pas</Transaction>
     <Transaction>2021/03/01 11:06:32.000.575,=D:\Biblioteca\UntVariaveis.pas</Transaction>
     <Transaction>2021/03/01 11:06:32.000.492,=D:\Biblioteca\UntConstantes.pas</Transaction>
-    <Transaction>2021/03/01 11:06:32.000.540,=D:\Biblioteca\UntImpressaoTermica.pas</Transaction>
+    <Transaction>2021/03/01 11:06:32.000.313,=D:\Biblioteca\uCComunicacao.pas</Transaction>
+    <Transaction>2021/03/01 11:06:32.000.483,=D:\Biblioteca\UntComponentesGerais.pas</Transaction>
+    <Transaction>2021/03/01 11:06:32.000.565,=D:\Biblioteca\UntTypes.pas</Transaction>
     <Transaction>2021/03/24 16:17:12.000.984,D:\Biblioteca\UntImpressaoTermica.pas=</Transaction>
     <Transaction>2021/03/24 16:17:12.000.999,D:\Biblioteca\uCComunicacao.pas=</Transaction>
+    <Transaction>2021/07/01 12:57:40.000.447,=D:\Arquivos Projetos\Bibliotecas\Helpers\Helpers.Functions.pas</Transaction>
+    <Transaction>2021/07/01 12:57:52.000.737,=D:\Arquivos Projetos\Bibliotecas\SearchScreen\SearchScreen.Controller.pas</Transaction>
+    <Transaction>2021/07/01 12:57:52.000.831,=D:\Arquivos Projetos\Bibliotecas\SearchScreen\SearchScreen.View.pas</Transaction>
+    <Transaction>2021/07/01 12:58:59.000.488,=D:\Arquivos Projetos\Bibliotecas\Msg\Msg.Controller.pas</Transaction>
+    <Transaction>2021/07/01 12:58:59.000.581,=D:\Arquivos Projetos\Bibliotecas\Msg\Msg.View.pas</Transaction>
+    <Transaction>2021/07/01 13:03:01.000.012,D:\Arquivos Projetos\AddOns\UntMain.pas=D:\Arquivos Projetos\AddOns\Src\View\AddOns.View.Principal.pas</Transaction>
+    <Transaction>2021/07/01 13:03:01.000.012,D:\Arquivos Projetos\AddOns\UntMain.dfm=D:\Arquivos Projetos\AddOns\Src\View\AddOns.View.Principal.dfm</Transaction>
+    <Transaction>2021/07/01 14:04:48.000.529,=D:\Arquivos Projetos\AddOns\Unit1.pas</Transaction>
+    <Transaction>2021/07/01 14:07:26.000.382,=D:\Arquivos Projetos\AddOns\Unit1.pas</Transaction>
+    <Transaction>2021/07/01 14:07:44.000.685,D:\Arquivos Projetos\AddOns\Src\Controller\AddOns.Controller.pas=D:\Arquivos Projetos\AddOns\Unit1.pas</Transaction>
+    <Transaction>2021/07/01 14:09:44.000.719,=D:\Arquivos Projetos\AddOns\Unit1.pas</Transaction>
+    <Transaction>2021/07/01 14:09:55.000.503,D:\Arquivos Projetos\AddOns\Src\Model\AddOns.Model.pas=D:\Arquivos Projetos\AddOns\Unit1.pas</Transaction>
+    <Transaction>2021/07/01 14:35:51.000.067,D:\Arquivos Projetos\AddOns\Src\Model\AddOns.Model.pas=</Transaction>
+    <Transaction>2021/07/01 14:35:51.000.098,D:\Arquivos Projetos\AddOns\Src\Controller\AddOns.Controller.pas=</Transaction>
   </Transactions>
 </BorlandProject>
