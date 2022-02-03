@@ -1,11 +1,11 @@
-object FrmMain: TFrmMain
+object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'AddOns'
-  ClientHeight = 134
-  ClientWidth = 387
+  ClientHeight = 159
+  ClientWidth = 439
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,8 +22,8 @@ object FrmMain: TFrmMain
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 381
-    Height = 87
+    Width = 433
+    Height = 134
     Align = alClient
     Alignment = taCenter
     Font.Charset = DEFAULT_CHARSET
@@ -36,52 +36,28 @@ object FrmMain: TFrmMain
     ExplicitWidth = 8
     ExplicitHeight = 33
   end
-  object BtnFechar: TImage
-    Left = 354
-    Top = 8
-    Width = 25
-    Height = 25
+  object ImgClose: TImage
+    Left = 392
+    Top = 3
+    Width = 47
+    Height = 41
     Cursor = crNo
-    OnClick = BtnFecharClick
+    OnClick = ImgCloseClick
   end
-  object Memo1: TMemo
+  object StatusBar: TStatusBar
     Left = 0
-    Top = 93
-    Width = 387
-    Height = 11
-    Align = alBottom
-    TabOrder = 0
-    Visible = False
-    WordWrap = False
-  end
-  object StatusBar1: TStatusBar
-    Left = 0
-    Top = 115
-    Width = 387
+    Top = 140
+    Width = 439
     Height = 19
     Panels = <
       item
         Width = 50
       end>
   end
-  object mmLinks: TMemo
-    Left = 0
-    Top = 104
-    Width = 387
-    Height = 11
-    Align = alBottom
-    TabOrder = 2
-    Visible = False
-    WordWrap = False
-  end
-  object Timer1: TTimer
+  object TimerShow: TTimer
     Enabled = False
-    OnTimer = Timer1Timer
-    Left = 8
-    Top = 8
-  end
-  object OpenDialog: TOpenDialog
-    Left = 112
-    Top = 8
+    OnTimer = TimerShowTimer
+    Left = 24
+    Top = 16
   end
 end

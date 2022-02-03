@@ -1,26 +1,33 @@
 program AddOns;
 
 uses
+  System.SysUtils,
   Vcl.Forms,
-  AddOns.View.Principal in 'Src\View\AddOns.View.Principal.pas' {FrmMain},
   Vcl.Themes,
   Vcl.Styles,
-  Helpers.Functions in '..\Bibliotecas\Helpers\Helpers.Functions.pas',
-  SearchScreen.Controller in '..\Bibliotecas\SearchScreen\SearchScreen.Controller.pas',
-  SearchScreen.View in '..\Bibliotecas\SearchScreen\SearchScreen.View.pas' {FrmBuscaComponentesTela},
-  Msg.Controller in '..\Bibliotecas\Msg\Msg.Controller.pas',
-  Msg.View in '..\Bibliotecas\Msg\Msg.View.pas' {FrmMensagem};
+  View.Principal in 'Src\View\View.Principal.pas' {ViewPrincipal},
+  Controller.Interfaces in 'Src\Controller\Controller.Interfaces.pas',
+  Controller.Factory in 'Src\Controller\Controller.Factory.pas',
+  Model.Sistema.Interfaces in 'Src\Model\Sistema\Model.Sistema.Interfaces.pas',
+  Model.Sistema in 'Src\Model\Sistema\Model.Sistema.pas',
+  Model.Utils in 'Src\Model\Utils\Model.Utils.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
-  Application.MainFormOnTaskbar := True;
   TStyleManager.TrySetStyle('Amethyst Kamri');
-  Application.CreateForm(TFrmMain, FrmMain);
-  Application.CreateForm(TFrmBuscaComponentesTela, FrmBuscaComponentesTela);
-  Application.CreateForm(TFrmMensagem, FrmMensagem);
-  Application.CreateForm(TFrmBuscaComponentesTela, FrmBuscaComponentesTela);
-  Application.CreateForm(TFrmMensagem, FrmMensagem);
+
+  ViewPrincipal := TViewPrincipal.Create(nil);
+  try
+    ViewPrincipal.ShowModal;
+    ViewPrincipal.Update;
+    repeat
+      Application.ProcessMessages;
+    until ViewPrincipal.CloseQuery;
+  finally
+    FreeAndNil(ViewPrincipal);
+  end;
+
   Application.Run;
 end.
