@@ -19,10 +19,6 @@ uses
   Vcl.ImgList,
   Controller.Interfaces;
 
-const
-   Versao    = 1;
-   SubVersao = 0;
-
 type
   TViewPrincipal = class(TForm)
     TimerShow: TTimer;
@@ -37,7 +33,6 @@ type
     FController: iController;
 
     procedure OnShowName(AName: string);
-    procedure OnMsg(AMsg: string);
     procedure OnStatus(AMsg: string);
   public
   end;
@@ -48,7 +43,8 @@ var
 implementation
 
 uses
-  Controller.Factory, Model.Utils;
+  Controller.Factory,
+  Model.Utils;
 
 {$R *.dfm}
 
@@ -56,8 +52,8 @@ uses
 procedure TViewPrincipal.FormCreate(Sender: TObject);
 begin
    ReportMemoryLeaksOnShutdown := True;
-   Self.Caption := Self.Caption + '  - Versão: ' + Versao.ToString + '.' + SubVersao.ToString;
    FController  := TController.New;
+   Self.Caption := Self.Caption + Model.Utils.SystemVersion;
 end;
 
 procedure TViewPrincipal.FormShow(Sender: TObject);
@@ -77,8 +73,12 @@ begin
 
    FController
     .Sistema
+     .OnShowName(Self.OnShowName)
+     .OnStatus(Self.OnStatus)
      .ConfigurationLoad
-     .LinksLoad;
+     .LinksLoad
+     .DownloadFiles
+     .ExtractDownloadedFiles;
 
    TimerShow.Enabled  := True;
    TimerShow.Interval := 60000;
@@ -90,11 +90,6 @@ end;
 procedure TViewPrincipal.OnShowName(AName: string);
 begin
    lbNome.Caption := AName;
-end;
-
-procedure TViewPrincipal.OnMsg(AMsg: string);
-begin
-   ShowMessage(AMsg);
 end;
 
 procedure TViewPrincipal.OnStatus(AMsg: string);

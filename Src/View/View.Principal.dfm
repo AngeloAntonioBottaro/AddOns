@@ -4,8 +4,8 @@ object ViewPrincipal: TViewPrincipal
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'AddOns'
-  ClientHeight = 159
-  ClientWidth = 439
+  ClientHeight = 222
+  ClientWidth = 545
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,14 +16,17 @@ object ViewPrincipal: TViewPrincipal
   Position = poScreenCenter
   OnCreate = FormCreate
   OnShow = FormShow
+  DesignSize = (
+    545
+    222)
   PixelsPerInch = 96
   TextHeight = 13
   object lbNome: TLabel
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 433
-    Height = 134
+    Width = 539
+    Height = 197
     Align = alClient
     Alignment = taCenter
     Font.Charset = DEFAULT_CHARSET
@@ -37,22 +40,26 @@ object ViewPrincipal: TViewPrincipal
     ExplicitHeight = 33
   end
   object ImgClose: TImage
-    Left = 392
+    Left = 490
     Top = 3
     Width = 47
     Height = 41
     Cursor = crNo
+    Anchors = [akTop, akRight]
     OnClick = ImgCloseClick
+    ExplicitLeft = 522
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 140
-    Width = 439
+    Top = 203
+    Width = 545
     Height = 19
     Panels = <
       item
         Width = 50
       end>
+    ExplicitTop = 140
+    ExplicitWidth = 439
   end
   object TimerShow: TTimer
     Enabled = False
