@@ -29,6 +29,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure TimerShowTimer(Sender: TObject);
     procedure ImgCloseClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FController: iController;
 
@@ -48,12 +49,20 @@ uses
 
 {$R *.dfm}
 
-
 procedure TViewPrincipal.FormCreate(Sender: TObject);
 begin
    ReportMemoryLeaksOnShutdown := True;
-   FController  := TController.New;
    Self.Caption := Self.Caption + Model.Utils.SystemVersion;
+   FController  := TController.New;
+end;
+
+procedure TViewPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   if(FileExists(CArquivoLock)and(not VAppRunning))then
+   begin
+      if(not DeleteFile(CArquivoLock))then
+        ShowMessage('Arquivo lock nao deletado');
+   end;
 end;
 
 procedure TViewPrincipal.FormShow(Sender: TObject);
@@ -75,16 +84,22 @@ begin
     .Sistema
      .OnShowName(Self.OnShowName)
      .OnStatus(Self.OnStatus)
+     .VerifyApplicationOpen
      .ConfigurationLoad
      .LinksLoad
      .DownloadFiles
-     .ExtractDownloadedFiles;
-
-   TimerShow.Enabled  := True;
-   TimerShow.Interval := 60000;
+     .ExtractDownloadedFiles
+     .CloseBrowser
+     .CloseSystem;
 
    if(Model.Utils.VFechar)then
-     Application.Terminate;
+     Self.Close
+   else
+   begin
+      TimerShow.Interval := 5000;
+      TimerShow.Enabled  := True;
+      Self.OnStatus('Nova tentativa em 5 segundos');
+   end;
 end;
 
 procedure TViewPrincipal.OnShowName(AName: string);

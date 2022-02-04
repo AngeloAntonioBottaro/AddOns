@@ -16,6 +16,8 @@ uses
 
 begin
   Application.Initialize;
+  Application.Title := 'AddOns download';
+  Application.MainFormOnTaskBar := False;
   TStyleManager.TrySetStyle('Amethyst Kamri');
 
   ViewPrincipal := TViewPrincipal.Create(nil);

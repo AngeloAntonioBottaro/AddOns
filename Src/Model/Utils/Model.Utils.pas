@@ -18,8 +18,10 @@ const
   CDefaultBrowser = 'msedge.exe';
   CDefaultLink = 'http/www.exemplo.com/arquivo.rar';
 
+  CArquivoLock = 'AddOns.Lock';
 var
   VFechar: Boolean;
+  VAppRunning: Boolean;
 
 procedure CleanVariables;
 function SystemVersion: string;
@@ -28,7 +30,8 @@ implementation
 
 procedure CleanVariables;
 begin
-   VFechar := False;
+   VFechar     := False;
+   VAppRunning := False;
 end;
 
 function SystemVersion: string;

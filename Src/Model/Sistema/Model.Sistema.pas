@@ -46,10 +46,13 @@ type
     function OnShowName(AValue: TProc<String>): iModelSistema;
     function OnStatus(AValue: TProc<String>): iModelSistema;
 
+    function VerifyApplicationOpen: iModelSistema;
     function ConfigurationLoad: iModelSistema;
     function LinksLoad: iModelSistema;
     function DownloadFiles: iModelSistema;
     function ExtractDownloadedFiles: iModelSistema;
+    function CloseBrowser: iModelSistema;
+    function CloseSystem: iModelSistema;
   public
     constructor Create;
     class function New: iModelSistema;
@@ -127,6 +130,21 @@ end;
 function TModelSistema.Encerrar: Boolean;
 begin
    Result := Model.Utils.VFechar or FEncerrar;
+end;
+
+function TModelSistema.VerifyApplicationOpen: iModelSistema;
+begin
+   Result      := Self;
+   VAppRunning := FileExists(CArquivoLock);
+
+   if(not VAppRunning)then
+   begin
+      FileCreate(CArquivoLock);
+      Exit;
+   end;
+
+   Self.DoShowName('Aplicativo já iniciado');
+   Self.CloseSystem;
 end;
 
 function TModelSistema.ConfigurationLoad: iModelSistema;
@@ -207,6 +225,7 @@ begin
    begin
       Self.DoStatus('Sem conexão com a internet');
       FEncerrar := True;
+      Exit;
    end;
 
    Self.DoStatus('Conexão com a internet');
@@ -254,9 +273,11 @@ begin
 
      for I := 0 to LListaLinks.Count - 1 do
      begin
-        FLinksCounter := I + 1;
+        if(Self.Encerrar)then
+          Exit;
 
-        MyLibrary.OpenLink(LListaLinks[I].Trim);
+        FLinksCounter := I + 1;
+        MyLibrary.OpenLink(LListaLinks[I].Trim, tpAbrirLinkMinimizado);
         Self.WaitDownloadFinish;
      end;
    finally
@@ -271,14 +292,15 @@ var
   LListaArquivos: TStrings;
   I: Integer;
 begin
+   if(Self.Encerrar)then
+     Exit;
+
    LListaArquivos := TStringList.Create;
    try
-
      repeat
        Sleep(2000);
        MyLibrary.ListFiles(LListaArquivos, Self.PastaDownload, 'zip');
      until(FLinksCounter = LListaArquivos.Count);
-
    finally
      LListaArquivos.DisposeOf;
    end;
@@ -305,13 +327,33 @@ begin
      begin
         LFile := Self.PastaDownload + LListaArquivos[I];
         MyLibrary.DescompactFile(LFile, Self.PastaExtrair);
-        DeleteFile(LFile);
      end;
    finally
      LListaArquivos.DisposeOf;
    end;
 
    Self.DoStatus('Arquivos extraidos com sucesso');
+
+   Self.ClearDownloadRepository;
+end;
+
+function TModelSistema.CloseBrowser: iModelSistema;
+begin
+   Result := Self;
+
+   if(VAppRunning)then
+     Exit;
+
+   Self.DoStatus('Fechando o navegador');
+   MyLibrary.CloseEXE(Model.Utils.CDefaultBrowser);
+end;
+
+function TModelSistema.CloseSystem: iModelSistema;
+begin
+   Result := Self;
+   Self.DoStatus('Finalizando sistema...');
+   Model.Utils.VFechar := True;
+   Sleep(2000);
 end;
 
 end.

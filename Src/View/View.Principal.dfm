@@ -12,8 +12,10 @@ object ViewPrincipal: TViewPrincipal
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  FormStyle = fsStayOnTop
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   DesignSize = (
@@ -58,8 +60,6 @@ object ViewPrincipal: TViewPrincipal
       item
         Width = 50
       end>
-    ExplicitTop = 140
-    ExplicitWidth = 439
   end
   object TimerShow: TTimer
     Enabled = False
