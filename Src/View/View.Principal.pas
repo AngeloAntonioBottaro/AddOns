@@ -29,7 +29,6 @@ type
     procedure FormShow(Sender: TObject);
     procedure TimerShowTimer(Sender: TObject);
     procedure ImgCloseClick(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FController: iController;
 
@@ -52,17 +51,9 @@ uses
 procedure TViewPrincipal.FormCreate(Sender: TObject);
 begin
    ReportMemoryLeaksOnShutdown := True;
+   Model.Utils.CleanVariables;
    Self.Caption := Self.Caption + Model.Utils.SystemVersion;
    FController  := TController.New;
-end;
-
-procedure TViewPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-   if(FileExists(CArquivoLock)and(not VAppRunning))then
-   begin
-      if(not DeleteFile(CArquivoLock))then
-        ShowMessage('Arquivo lock nao deletado');
-   end;
 end;
 
 procedure TViewPrincipal.FormShow(Sender: TObject);
@@ -79,6 +70,8 @@ end;
 procedure TViewPrincipal.TimerShowTimer(Sender: TObject);
 begin
    TimerShow.Enabled := False;
+   if(FileExists(CArquivoLock)and(not VAppRunning))then
+     DeleteFile(CArquivoLock);
 
    FController
     .Sistema

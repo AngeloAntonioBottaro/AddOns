@@ -13,6 +13,7 @@ const
   CIdentNome = 'Nome';
   CIdentPastaDownload = 'PastaDownload';
   CIdentPastaExtrair = 'PastaExtrair';
+  CIdentBrowser = 'Browser';
 
   //DEFAULTS
   CDefaultBrowser = 'msedge.exe';

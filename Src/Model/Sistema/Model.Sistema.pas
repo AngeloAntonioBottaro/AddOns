@@ -24,6 +24,7 @@ type
     FNome: string;
     FPastaDownload: string;
     FPastaExtrair: string;
+    FBrowser: string;
 
     FLinksCounter: Integer;
 
@@ -35,6 +36,7 @@ type
     function Nome: string;
     function PastaDownload: string;
     function PastaExtrair: string;
+    function Browser: string;
 
     procedure CreateConfFile;
     procedure CreateLinksfFile;
@@ -72,7 +74,6 @@ end;
 
 constructor TModelSistema.Create;
 begin
-   Model.Utils.CleanVariables;
    FIniFile      := TMyIniLibrary.New;
    FLinksFile    := TMyTxtLibrary.New;
    FEncerrar     := False;
@@ -127,6 +128,13 @@ begin
    Result := IncludeTrailingPathDelimiter(FPastaExtrair);
 end;
 
+function TModelSistema.Browser: string;
+begin
+   if(FBrowser = EmptyStr)then
+     FBrowser := Model.Utils.CDefaultBrowser;
+   Result := FBrowser;
+end;
+
 function TModelSistema.Encerrar: Boolean;
 begin
    Result := Model.Utils.VFechar or FEncerrar;
@@ -166,18 +174,20 @@ begin
    FNome          := FIniFile.Identifier(Model.Utils.CIdentNome).ReadIniFileStr;
    FPastaDownload := FIniFile.Identifier(Model.Utils.CIdentPastaDownload).ReadIniFileStr;
    FPastaExtrair  := FIniFile.Identifier(Model.Utils.CIdentPastaExtrair).ReadIniFileStr;
+   FBrowser       := FIniFile.Identifier(Model.Utils.CIdentBrowser).ReadIniFileStr;
 
    DoShowName(Self.Nome);
 end;
 
 procedure TModelSistema.CreateConfFile;
 begin
-   Self.DoStatus('Criando/Atualizando arquivo de configurações');
+   Self.DoStatus('Criando arquivo de configurações');
 
    FIniFile
     .Identifier(Model.Utils.CIdentNome).WriteIniFile(Self.Nome)
     .Identifier(Model.Utils.CIdentPastaDownload).WriteIniFile(Self.PastaDownload)
     .Identifier(Model.Utils.CIdentPastaExtrair).WriteIniFile(Self.PastaExtrair)
+    .Identifier(Model.Utils.CIdentBrowser).WriteIniFile(Model.Utils.CDefaultBrowser);
 end;
 
 function TModelSistema.LinksLoad: iModelSistema;
@@ -345,7 +355,7 @@ begin
      Exit;
 
    Self.DoStatus('Fechando o navegador');
-   MyLibrary.CloseEXE(Model.Utils.CDefaultBrowser);
+   MyLibrary.CloseEXE(Self.Browser);
 end;
 
 function TModelSistema.CloseSystem: iModelSistema;

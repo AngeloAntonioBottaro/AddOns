@@ -15,7 +15,6 @@ object ViewPrincipal: TViewPrincipal
   FormStyle = fsStayOnTop
   OldCreateOrder = False
   Position = poScreenCenter
-  OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   DesignSize = (
