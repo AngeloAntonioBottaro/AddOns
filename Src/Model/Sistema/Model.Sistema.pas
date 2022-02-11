@@ -107,7 +107,7 @@ end;
 function TModelSistema.Nome: string;
 begin
    if(FNome = EmptyStr)then
-     FNome := 'CONFIGURACAO NECESSARIA';
+     FNome := Model.Utils.CDefaultNome;
 
    Result := FNome;
 end;
@@ -143,13 +143,10 @@ end;
 function TModelSistema.VerifyApplicationOpen: iModelSistema;
 begin
    Result      := Self;
-   VAppRunning := FileExists(CArquivoLock);
+   VAppRunning := MyLibrary.ThisAppRunning;
 
    if(not VAppRunning)then
-   begin
-      FileCreate(CArquivoLock);
-      Exit;
-   end;
+     Exit;
 
    Self.DoShowName('Aplicativo já iniciado');
    Self.CloseSystem;
@@ -270,7 +267,6 @@ procedure TModelSistema.ProcessFilesDownlod;
 var
   LListaLinks: TStrings;
   I: Integer;
-  ltemp: string;
 begin
    if(Self.Encerrar)then
      Exit;
@@ -286,21 +282,28 @@ begin
         if(Self.Encerrar)then
           Exit;
 
+        if(LListaLinks[I].Trim = Model.Utils.CDefaultLink)then
+        begin
+           Self.DoStatus('Verifique os links informados no arquivo de links');
+           Sleep(2000);
+           Model.Utils.VFechar := True;
+           Break;
+        end;
+
         FLinksCounter := I + 1;
         MyLibrary.OpenLink(LListaLinks[I].Trim, tpAbrirLinkMinimizado);
         Self.WaitDownloadFinish;
      end;
+
+     Self.DoStatus('Realizado download dos arquivos');
    finally
      LListaLinks.DisposeOf;
    end;
-
-   Self.DoStatus('Realizado download dos arquivos');
 end;
 
 procedure TModelSistema.WaitDownloadFinish;
 var
   LListaArquivos: TStrings;
-  I: Integer;
 begin
    if(Self.Encerrar)then
      Exit;
@@ -308,7 +311,7 @@ begin
    LListaArquivos := TStringList.Create;
    try
      repeat
-       Sleep(2000);
+       Self.DoStatus('');
        MyLibrary.ListFiles(LListaArquivos, Self.PastaDownload, 'zip');
      until(FLinksCounter = LListaArquivos.Count);
    finally

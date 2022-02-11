@@ -70,8 +70,6 @@ end;
 procedure TViewPrincipal.TimerShowTimer(Sender: TObject);
 begin
    TimerShow.Enabled := False;
-   if(FileExists(CArquivoLock)and(not VAppRunning))then
-     DeleteFile(CArquivoLock);
 
    FController
     .Sistema
@@ -97,12 +95,15 @@ end;
 
 procedure TViewPrincipal.OnShowName(AName: string);
 begin
-   lbNome.Caption := AName;
+   lbNome.Caption      := AName;
+   Model.Utils.VFechar := (AName = Model.Utils.CDefaultNome);
 end;
 
 procedure TViewPrincipal.OnStatus(AMsg: string);
 begin
-   StatusBar.Panels[0].Text := AMsg;
+   if(AMsg.Trim <> EmptyStr)then
+     StatusBar.Panels[0].Text := AMsg;
+
    Application.ProcessMessages;
 end;
 

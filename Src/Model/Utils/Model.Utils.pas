@@ -18,6 +18,7 @@ const
   //DEFAULTS
   CDefaultBrowser = 'msedge.exe';
   CDefaultLink = 'http/www.exemplo.com/arquivo.rar';
+  CDefaultNome = 'CONFIGURACAO NECESSARIA';
 
   CArquivoLock = 'AddOns.Lock';
 var
